@@ -13,7 +13,7 @@ if __name__ == '__main__':
     date = df['Fecha (dd/mm/aaaa)']
     trm = df['Tasa de cambio representativa del mercado (TRM)']
     
-    df.plot(x='Fecha (dd/mm/aaaa)', y='Tasa de cambio representativa del mercado (TRM)', style='o')
+    df.plot(x='Id', y='Tasa de cambio representativa del mercado (TRM)', style='o')
     plt.title('TRM')
     plt.show()
     
@@ -21,10 +21,10 @@ if __name__ == '__main__':
     plt.tight_layout()
     seabornInstance.distplot(df['Tasa de cambio representativa del mercado (TRM)'])
     
-    X = df['Fecha (dd/mm/aaaa)'].values.reshape(-1,1)
+    X = df['Id'].values.reshape(-1,1)
+    
     y = df['Tasa de cambio representativa del mercado (TRM)'].values.reshape(-1,1)
     
-    X = np.dtype('datetime64[s]')
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
     
@@ -32,6 +32,21 @@ if __name__ == '__main__':
     regressor.fit(X_train, y_train)
     
     y_pred = regressor.predict(X_test)
+    
+    df1 = pd.DataFrame({'Actual': y_test.flatten(), 'Predicted':                     y_pred.flatten()})
+    
+    
+    df2 = df1.head(25)
+    df2.plot(kind='bar',figsize=(16,10))
+    plt.grid(which='major', linestyle='-', linewidth='0.5', color='green')
+    plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+    plt.show()
+    
+    
+    plt.scatter(X_test, y_test,  color='gray')
+    plt.plot(X_test, y_pred, color='red', linewidth=2)
+    plt.show()
+
     
     
     
